@@ -41,8 +41,18 @@ const saveToPdf = async (htmlContent) => {
     });
     await page.waitForNetworkIdle({idleTime: 200});
     const pdf = await page.pdf({
-      printBackground: true,
-      format: 'A4'
+        printBackground: true,
+        format: 'A4',
+        displayHeaderFooter: true,
+        headerTemplate: `<div></div>`,
+        footerTemplate: `
+        <div style="width: 100%; font-size: 16px;
+            padding: 10px 20px 10px; color: #bbb; position: relative;">
+            <div style="position: absolute; right: 35px; top: 5px;"><span class="pageNumber"></span>/<span class="totalPages"></span></div>
+        </div>
+        `,
+        // this is needed to prevent content from being placed over the footer
+        margin: { bottom: '70px' },
     });
     await page.close();
 
